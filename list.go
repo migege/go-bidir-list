@@ -8,7 +8,7 @@ type List struct {
 
 type Item struct {
 	ItemId string
-	Money  uint
+	Score  uint
 	Prev   *Item
 	Next   *Item
 }
@@ -27,7 +27,7 @@ func (l *List) adjust(item *Item) {
 	}
 
 	t := item.Prev
-	for t != nil && t.Money < item.Money {
+	for t != nil && t.Score < item.Score {
 		t = t.Prev
 	}
 
@@ -71,13 +71,13 @@ func (l *List) adjust(item *Item) {
 	}
 }
 
-func (l *List) AddMoney(id string, money uint) bool {
+func (l *List) AddScore(id string, money uint) bool {
 	if l.Map[id] != nil {
 		item := l.Map[id]
-		item.Money += money
+		item.Score += money
 		l.adjust(item)
 	} else {
-		item := &Item{ItemId: id, Money: money, Prev: l.Tail}
+		item := &Item{ItemId: id, Score: money, Prev: l.Tail}
 		l.Map[id] = item
 		l.adjust(item)
 	}
@@ -109,10 +109,10 @@ func (l *List) CheckList() string {
 	t := l.Head
 	v := uint(4294967295)
 	for t != nil {
-		if t.Money > v {
-			return "Head: Money Order Error"
+		if t.Score > v {
+			return "Head: Score Order Error"
 		}
-		v = t.Money
+		v = t.Score
 		t = t.Next
 		len_from_head++
 	}
@@ -121,10 +121,10 @@ func (l *List) CheckList() string {
 	t = l.Tail
 	v = 0
 	for t != nil {
-		if t.Money < v {
-			return "Tail: Money Order Error"
+		if t.Score < v {
+			return "Tail: Score Order Error"
 		}
-		v = t.Money
+		v = t.Score
 		t = t.Prev
 		len_from_tail++
 	}
